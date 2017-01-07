@@ -2,8 +2,8 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Resrobot ( getDepartures
-                , getLocation
+module Resrobot ( departures
+                , locations
                 , Format(..)
                 , module Resrobot.Types
                 ) where
@@ -35,4 +35,10 @@ instance ToHttpApiData Format where
 timetableApi :: Proxy TimetableAPI
 timetableApi = Proxy
 
-getDepartures :<|> getLocation = client timetableApi
+departures' :<|> locations' = client timetableApi
+
+departures :: Text -> Text -> ClientM DepartureBoard
+departures key _id = departures' (Just key) (Just _id)
+
+locations :: Text -> Text -> ClientM LocationList
+locations key input = locations' (Just key) (Just input) (Just Json)
