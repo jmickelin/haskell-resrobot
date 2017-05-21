@@ -1,8 +1,8 @@
 module Resrobot.Utils where
 
-import Control.Lens
 import Data.Maybe
 import Data.Text (Text)
+import Lens.Micro
 import Network.HTTP.Client (newManager, defaultManagerSettings)
 import Network.HTTP.Client.TLS
 import Servant.API
@@ -45,5 +45,5 @@ getTopLocation key name = getTop <$> getLocations key name
 getDeparturesByName :: Text -> Text -> Text -> IO (Either ServantError DepartureBoard)
 getDeparturesByName locationKey departureKey name = runClientMDefault $
   do l <- locations locationKey name
-     let locId = topLocation l ^. _stoplocId
+     let locId = topLocation l ^. Resrobot.Lens.id
      departures departureKey locId

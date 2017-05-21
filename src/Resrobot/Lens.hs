@@ -1,13 +1,19 @@
-{-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE FlexibleInstances      #-}
+{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE MultiParamTypeClasses  #-}
+{-# LANGUAGE TemplateHaskell        #-}
+{-# OPTIONS_HADDOCK prune #-}
 module Resrobot.Lens where
 
-import Control.Lens.TH
+import           Data.Foldable
+import           Lens.Micro
+import           Lens.Micro.TH
 import qualified Resrobot.Types as RT
 
-makeClassy_ ''RT.Stop
-makeClassy_ ''RT.StopList
-makeClassy_ ''RT.ResProduct
-makeClassy_ ''RT.Departure
-makeClassy_ ''RT.DepartureBoard
-makeClassy_ ''RT.StopLocation
+makeLensesWith abbreviatedFields ''RT.Stop
+makeLensesWith abbreviatedFields ''RT.StopList
+makeLensesWith abbreviatedFields ''RT.ResProduct
+makeLensesWith abbreviatedFields ''RT.Departure
+makeLensesWith abbreviatedFields ''RT.DepartureBoard
+makeLensesWith abbreviatedFields ''RT.StopLocation
+makeLensesWith abbreviatedFields ''RT.LocationList

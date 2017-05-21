@@ -4,7 +4,6 @@
 
 module Resrobot.Types where
 
-import Control.Lens
 import Data.Aeson
 import Data.Aeson.TH
 import Data.Aeson.Types
@@ -12,6 +11,7 @@ import Data.Char
 import Data.Text (Text)
 import qualified Data.Text as T
 import           GHC.Generics
+import Lens.Micro
 
 data Stop = Stop { stopName :: Text
 
@@ -71,7 +71,7 @@ data Departure = Departure { depProduct :: ResProduct
                            , depStops   :: StopList
 
                            , depName  :: Text
-                           , depType :: Text
+                           , depDType :: Text
 
                            , depStop      :: Text
                            , depStopid    :: Text
@@ -176,9 +176,14 @@ instance ToJSON ResProduct where
 {- Departure
 
    JSON fields are camelCase except for Product and Stops
+
+   The "type" field is renamed "depDType" to avoid clashing
+   with the "type" keyword when generating lenses for this
+   type.
 -}
 departureModifier "depProduct" = "Product"
 departureModifier "depStops"   = "Stops"
+departureModifier "depDType"   = "type"
 departureModifier s = lowercaseFirst . dropPrefix $ s
 
 instance FromJSON Departure where

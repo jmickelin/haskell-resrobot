@@ -24,7 +24,8 @@ library
                      , http-api-data
                      , http-client
                      , http-client-tls
-                     , lens
+                     , microlens
+                     , microlens-th
                      , servant
                      , servant-client >= 0.9
                      , text
