@@ -1,5 +1,5 @@
 name:                resrobot
-version:             0.1.0.0
+version:             0.2.0.0
 synopsis:            Provides Haskell bindings for the Resrobot APIs from http://trafiklab.se
 description:         Please see README.md
 homepage:            https://github.com/jmickelin/resrobot#readme
