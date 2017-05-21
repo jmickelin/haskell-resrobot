@@ -57,8 +57,8 @@ minimalTests = testGroup "parsing minimal examples"
                  eitherDecode locationsJSON @?= Right locationsParsed
                ]
   where
-    stopJSON = "{ \"name\": \"\", \"id\": \"\", \"extId\": \"\" }"
-    stopParsed = Stop "" "" ""
+    stopJSON = "{ \"name\": \"apa\", \"id\": \"bepa\", \"extId\": \"cepa\" }"
+    stopParsed = Stop "apa" "bepa" "cepa"
                  Nothing Nothing Nothing Nothing
                  Nothing Nothing Nothing Nothing
                  Nothing Nothing Nothing Nothing
@@ -66,17 +66,17 @@ minimalTests = testGroup "parsing minimal examples"
                  Nothing Nothing Nothing Nothing
     stoplistJSON = "{ \"Stop\": [" <> stopJSON <> ", " <> stopJSON <> "]}"
     stoplistParsed = StopList [stopParsed, stopParsed]
-    productJSON = "{ \"name\": \"\", \"num\": \"\"}"
-    productParsed = Product' (Just "") (Just "")
+    productJSON = "{ \"name\": \"depa\", \"num\": \"epa\"}"
+    productParsed = Product' (Just "depa") (Just "epa")
                              Nothing Nothing Nothing Nothing
                              Nothing Nothing Nothing Nothing
     departureJSON = "{ \"Product\": " <> productJSON <> ", " <>
                     "\"Stops\": " <> stoplistJSON <> ", " <>
-                    "\"name\": \"\", \"type\": \"\", \"stop\": \"\", " <>
-                    "\"stopid\": \"\", \"time\": \"\", \"date\": \"\"" <>
+                    "\"name\": \"fepa\", \"type\": \"gepa\", \"stop\": \"hepa\", " <>
+                    "\"stopid\": \"iepa\", \"time\": \"jepa\", \"date\": \"kepa\"" <>
                     "}"
     departureParsed = Departure productParsed stoplistParsed
-                                "" "" "" "" Nothing "" ""
+                                "fepa" "gepa" "hepa" "iepa" Nothing "jepa" "kepa"
                                 Nothing Nothing Nothing Nothing
                                 Nothing Nothing Nothing Nothing
                                 Nothing Nothing Nothing
@@ -84,8 +84,8 @@ minimalTests = testGroup "parsing minimal examples"
                                            departureJSON <> "]}"
     depboardParsed = DepartureBoard [departureParsed, departureParsed]
                                     Nothing Nothing
-    stoplocJSON = "{ \"id\": \"\", \"extId\": \"\", \"name\": \"\" }"
-    stoplocParsed = StopLocation "" "" ""
+    stoplocJSON = "{ \"id\": \"lepa\", \"extId\": \"mepa\", \"name\": \"nepa\" }"
+    stoplocParsed = StopLocation "lepa" "mepa" "nepa"
                                  Nothing Nothing Nothing
                                  Nothing Nothing Nothing
     locationsJSON = "{ \"StopLocation\": [" <> stoplocJSON <> ", " <>
