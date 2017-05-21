@@ -13,9 +13,6 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import           GHC.Generics
 
-lowercaseFirst = over _head toLower
-dropPrefix = dropWhile isLower
-
 data Stop = Stop { stopName :: Text
 
                  , stopId       :: Text
@@ -51,32 +48,8 @@ data Stop = Stop { stopName :: Text
                  }
             deriving (Show, Generic, Eq)
 
-instance FromJSON Stop where
-  -- JSON fields are camelCase
-  parseJSON = genericParseJSON defaultOptions {
-    fieldLabelModifier = lowercaseFirst . dropPrefix
-    }
-
-instance ToJSON Stop where
-  -- JSON fields are camelCase
-  toEncoding = genericToEncoding defaultOptions {
-    fieldLabelModifier = lowercaseFirst . dropPrefix
-    }
-
 newtype StopList = StopList { stoplistStop :: [Stop] }
              deriving (Show, Generic, Eq, Monoid)
-
-instance FromJSON StopList where
-  -- JSON field is on the form "Stop"
-  parseJSON = genericParseJSON defaultOptions {
-    fieldLabelModifier = dropPrefix
-    }
-
-instance ToJSON StopList where
-  -- JSON field is on the form "Stop"
-  toEncoding = genericToEncoding defaultOptions {
-    fieldLabelModifier = dropPrefix
-    }
 
 data Product' = Product' { prodName :: Maybe Text
                          , prodNum  :: Maybe Text
@@ -93,18 +66,6 @@ data Product' = Product' { prodName :: Maybe Text
                          , prodAdmin :: Maybe Text
                          }
               deriving (Show, Generic, Eq)
-
-instance FromJSON Product' where
-  -- JSON fields are camelCase
-  parseJSON = genericParseJSON defaultOptions {
-    fieldLabelModifier = lowercaseFirst . dropPrefix
-    }
-
-instance ToJSON Product' where
-  -- JSON fields are camelCase
-  toEncoding = genericToEncoding defaultOptions {
-    fieldLabelModifier = lowercaseFirst . dropPrefix
-    }
 
 data Departure = Departure { depProduct :: Product'
                            , depStops   :: StopList
@@ -138,40 +99,11 @@ data Departure = Departure { depProduct :: Product'
                            }
             deriving (Show, Generic, Eq)
 
--- JSON fields are camelCase except for Product and Stops
-departureModifier "depProduct" = "Product"
-departureModifier "depStops"   = "Stops"
-departureModifier s = lowercaseFirst . dropPrefix $ s
-
-instance FromJSON Departure where
-  parseJSON = genericParseJSON defaultOptions {
-    fieldLabelModifier = departureModifier
-    }
-
-instance ToJSON Departure where
-  toEncoding = genericToEncoding defaultOptions {
-    fieldLabelModifier = departureModifier
-    }
-
 data DepartureBoard = DepartureBoard { boardDeparture :: [Departure]
                                      , boardErrorCode :: Maybe Text
                                      , boardErrorText :: Maybe Text
                                      }
             deriving (Show, Generic, Eq)
-
--- JSON fields are camelCase except for Departure
-departureBoardModifier "boardDeparture" = "Departure"
-departureBoardModifier s = lowercaseFirst . dropPrefix $ s
-
-instance FromJSON DepartureBoard where
-  parseJSON = genericParseJSON defaultOptions {
-    fieldLabelModifier = departureBoardModifier
-    }
-
-instance ToJSON DepartureBoard where
-  toEncoding = genericToEncoding defaultOptions {
-    fieldLabelModifier = departureBoardModifier
-    }
 
 data StopLocation = StopLocation { stoplocId :: Text
                                  , stoplocExtId :: Text
@@ -189,29 +121,117 @@ data StopLocation = StopLocation { stoplocId :: Text
                                  }
                     deriving(Show, Generic, Eq)
 
+newtype LocationList = LocationList { locationsStopLocation :: [StopLocation] }
+                   deriving(Show, Generic, Eq, Monoid)
+
+------------------------------------------------------------
+-- Instances
+------------------------------------------------------------
+
+lowercaseFirst = over _head toLower
+dropPrefix = dropWhile isLower
+
+{- Stop
+
+   JSON fields are camelCase
+-}
+instance FromJSON Stop where
+  parseJSON = genericParseJSON defaultOptions {
+    fieldLabelModifier = lowercaseFirst . dropPrefix
+    }
+
+instance ToJSON Stop where
+  toEncoding = genericToEncoding defaultOptions {
+    fieldLabelModifier = lowercaseFirst . dropPrefix
+    }
+
+{- StopList
+
+   JSON field is on the form "Stop"
+-}
+instance FromJSON StopList where
+  parseJSON = genericParseJSON defaultOptions {
+    fieldLabelModifier = dropPrefix
+    }
+
+instance ToJSON StopList where
+  toEncoding = genericToEncoding defaultOptions {
+    fieldLabelModifier = dropPrefix
+    }
+
+{- Product'
+
+   JSON fields are camelCase
+-}
+instance FromJSON Product' where
+  parseJSON = genericParseJSON defaultOptions {
+    fieldLabelModifier = lowercaseFirst . dropPrefix
+    }
+
+instance ToJSON Product' where
+  toEncoding = genericToEncoding defaultOptions {
+    fieldLabelModifier = lowercaseFirst . dropPrefix
+    }
+
+{- Departure
+
+   JSON fields are camelCase except for Product and Stops
+-}
+departureModifier "depProduct" = "Product"
+departureModifier "depStops"   = "Stops"
+departureModifier s = lowercaseFirst . dropPrefix $ s
+
+instance FromJSON Departure where
+  parseJSON = genericParseJSON defaultOptions {
+    fieldLabelModifier = departureModifier
+    }
+
+instance ToJSON Departure where
+  toEncoding = genericToEncoding defaultOptions {
+    fieldLabelModifier = departureModifier
+    }
+
+{- DepartureBoard
+
+  JSON fields are camelCase except for Departure
+-}
+departureBoardModifier "boardDeparture" = "Departure"
+departureBoardModifier s = lowercaseFirst . dropPrefix $ s
+
+instance FromJSON DepartureBoard where
+  parseJSON = genericParseJSON defaultOptions {
+    fieldLabelModifier = departureBoardModifier
+    }
+
+instance ToJSON DepartureBoard where
+  toEncoding = genericToEncoding defaultOptions {
+    fieldLabelModifier = departureBoardModifier
+    }
+
+{- StopLocation
+
+   JSON fields are camelCase
+-}
 instance FromJSON StopLocation where
-  -- JSON fields are camelCase
   parseJSON = genericParseJSON defaultOptions {
     fieldLabelModifier = lowercaseFirst . dropPrefix
     }
 
 instance ToJSON StopLocation where
-  -- JSON fields are camelCase
   toEncoding = genericToEncoding defaultOptions {
     fieldLabelModifier = lowercaseFirst . dropPrefix
     }
 
-newtype LocationList = LocationList { locationsStopLocation :: [StopLocation] }
-                   deriving(Show, Generic, Eq, Monoid)
+{- LocationList
 
+   JSON field is on the form "StopLocation"
+-}
 instance FromJSON LocationList where
-  -- JSON field is on the form "StopLocation"
   parseJSON = genericParseJSON defaultOptions {
     fieldLabelModifier = dropPrefix
     }
 
 instance ToJSON LocationList where
-  -- JSON field is on the form "StopLocation"
   toEncoding = genericToEncoding defaultOptions {
     fieldLabelModifier = dropPrefix
     }
