@@ -45,5 +45,5 @@ getTopLocation key name = getTop <$> getLocations key name
 getDeparturesByName :: Text -> Text -> Text -> IO (Either ServantError DepartureBoard)
 getDeparturesByName locationKey departureKey name = runClientMDefault $
   do l <- locations locationKey name
-     let locId = topLocation l ^. Resrobot.Lens.id
+     let locId = topLocation l ^. identifier
      departures departureKey locId

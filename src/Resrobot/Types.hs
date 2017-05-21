@@ -15,7 +15,7 @@ import Lens.Micro
 
 data Stop = Stop { stopName :: Text
 
-                 , stopId       :: Text
+                 , stopIdentifier :: Text
                  , stopExtId    :: Text
                  , stopRouteIdx :: Maybe Integer
 
@@ -105,7 +105,7 @@ data DepartureBoard = DepartureBoard { boardDeparture :: [Departure]
                                      }
             deriving (Show, Generic, Eq)
 
-data StopLocation = StopLocation { stoplocId :: Text
+data StopLocation = StopLocation { stoplocIdentifier :: Text
                                  , stoplocExtId :: Text
                                  , stoplocName :: Text
 
@@ -134,15 +134,20 @@ dropPrefix = dropWhile isLower
 {- Stop
 
    JSON fields are camelCase
+
+   The "id" field is renamed "stopIdentifier" to avoid clashing
+   with the built-in "id" function.
 -}
+stopModifier "stopIdentifier" = "id"
+stopModifier s = lowercaseFirst . dropPrefix $ s
 instance FromJSON Stop where
   parseJSON = genericParseJSON defaultOptions {
-    fieldLabelModifier = lowercaseFirst . dropPrefix
+    fieldLabelModifier = stopModifier
     }
 
 instance ToJSON Stop where
   toEncoding = genericToEncoding defaultOptions {
-    fieldLabelModifier = lowercaseFirst . dropPrefix
+    fieldLabelModifier = stopModifier
     }
 
 {- StopList
@@ -216,15 +221,20 @@ instance ToJSON DepartureBoard where
 {- StopLocation
 
    JSON fields are camelCase
+
+   The "id" field is renamed "stoplocIdentifier" to avoid clashing
+   with the built-in "id" function.
 -}
+stoplocationModifier "stoplocIdentifier" = "id"
+stoplocationModifier s = lowercaseFirst . dropPrefix $ s
 instance FromJSON StopLocation where
   parseJSON = genericParseJSON defaultOptions {
-    fieldLabelModifier = lowercaseFirst . dropPrefix
+    fieldLabelModifier = stoplocationModifier
     }
 
 instance ToJSON StopLocation where
   toEncoding = genericToEncoding defaultOptions {
-    fieldLabelModifier = lowercaseFirst . dropPrefix
+    fieldLabelModifier = stoplocationModifier
     }
 
 {- LocationList
