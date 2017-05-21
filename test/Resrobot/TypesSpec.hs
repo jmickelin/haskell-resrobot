@@ -67,9 +67,9 @@ minimalTests = testGroup "parsing minimal examples"
     stoplistJSON = "{ \"Stop\": [" <> stopJSON <> ", " <> stopJSON <> "]}"
     stoplistParsed = StopList [stopParsed, stopParsed]
     productJSON = "{ \"name\": \"depa\", \"num\": \"epa\"}"
-    productParsed = Product' (Just "depa") (Just "epa")
-                             Nothing Nothing Nothing Nothing
-                             Nothing Nothing Nothing Nothing
+    productParsed = ResProduct (Just "depa") (Just "epa")
+                               Nothing Nothing Nothing Nothing
+                               Nothing Nothing Nothing Nothing
     departureJSON = "{ \"Product\": " <> productJSON <> ", " <>
                     "\"Stops\": " <> stoplistJSON <> ", " <>
                     "\"name\": \"fepa\", \"type\": \"gepa\", \"stop\": \"hepa\", " <>

@@ -21,10 +21,10 @@ instance Arbitrary StopList where
   -- Bound length of list to speed up checks
   arbitrary = StopList <$> (arbitrary `suchThat` ((<5) . length))
 
-instance Arbitrary Product' where
-  arbitrary = Product' <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
-                       <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
-                       <*> arbitrary <*> arbitrary
+instance Arbitrary ResProduct where
+  arbitrary = ResProduct <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+                         <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+                         <*> arbitrary <*> arbitrary
 
 instance Arbitrary Departure where
   arbitrary = Departure <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary

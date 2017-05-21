@@ -51,7 +51,7 @@ data Stop = Stop { stopName :: Text
 newtype StopList = StopList { stoplistStop :: [Stop] }
              deriving (Show, Generic, Eq, Monoid)
 
-data Product' = Product' { prodName :: Maybe Text
+data ResProduct = ResProduct { prodName :: Maybe Text
                          , prodNum  :: Maybe Text
 
                          , prodCatIn   :: Maybe Text
@@ -67,7 +67,7 @@ data Product' = Product' { prodName :: Maybe Text
                          }
               deriving (Show, Generic, Eq)
 
-data Departure = Departure { depProduct :: Product'
+data Departure = Departure { depProduct :: ResProduct
                            , depStops   :: StopList
 
                            , depName  :: Text
@@ -159,16 +159,16 @@ instance ToJSON StopList where
     fieldLabelModifier = dropPrefix
     }
 
-{- Product'
+{- ResProduct
 
    JSON fields are camelCase
 -}
-instance FromJSON Product' where
+instance FromJSON ResProduct where
   parseJSON = genericParseJSON defaultOptions {
     fieldLabelModifier = lowercaseFirst . dropPrefix
     }
 
-instance ToJSON Product' where
+instance ToJSON ResProduct where
   toEncoding = genericToEncoding defaultOptions {
     fieldLabelModifier = lowercaseFirst . dropPrefix
     }
